@@ -1,383 +1,204 @@
+<!-- pages/auth/login.vue -->
 <template>
-  <main>
-    <div class="">
-    <header class="absolute inset-x-0 top-0 z-50">
-      <nav class="flex items-center justify-between p-6 container mx-auto" aria-label="Global">
-        <div class="flex lg:flex-1">
-          <a href="#" class="-m-1.5 p-1.5">
-            <span class="sr-only">Your Company</span>
-            <img class="h-8 w-auto" src="@/assets/icons/white-logo.svg" alt="">
-          </a>
-        </div>
-        <div class="flex lg:hidden">
-          <button @click="isMenuOpen = true" type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-400">
-            <span class="sr-only">Open main menu</span>
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+  <div class="w-full max-w-md">
+    <div class="text-center mb-8">
+      <h1 class="text-2xl font-bold mb-2">Welcome back</h1>
+      <p class="text-gray-600">Sign in to continue to your account</p>
+    </div>
+
+    <!-- Social Login -->
+    <div class="space-y-4 mb-6">
+      <button 
+        @click="signInWithGoogle"
+        class="w-full flex space-x-2 items-center justify-center gap-2 border rounded-lg px-4 py-2 hover:bg-gray-50"
+      >
+      <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000000" viewBox="0 0 256 256"><path d="M239.82,114.19,72,18.16a16,16,0,0,0-16.12,0A15.68,15.68,0,0,0,48,31.87V224.13a15.68,15.68,0,0,0,7.92,13.67,16,16,0,0,0,16.12,0l167.78-96a15.75,15.75,0,0,0,0-27.62ZM64,212.67V43.33L148.69,128Zm96-73.36,18.92,18.92-88.5,50.66ZM90.4,47.1l88.53,50.67L160,116.69ZM193.31,150l-22-22,22-22,38.43,22Z"></path></svg>
+        Sign in with Google
+      </button>
+      
+      <button 
+        @click="signInWithFacebook"
+        class="w-full flex space-x-2 items-center justify-center gap-2 border rounded-lg px-4 py-2 hover:bg-gray-50"
+      >
+      <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="#000000" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm8,191.63V152h24a8,8,0,0,0,0-16H136V112a16,16,0,0,1,16-16h16a8,8,0,0,0,0-16H152a32,32,0,0,0-32,32v24H96a8,8,0,0,0,0,16h24v63.63a88,88,0,1,1,16,0Z"></path></svg>
+        Sign in with Facebook
+      </button>
+    </div>
+
+    <div class="relative my-6">
+      <div class="absolute inset-0 flex items-center">
+        <div class="w-full border-t border-gray-300"></div>
+      </div>
+      <div class="relative flex justify-center text-sm">
+        <span class="px-2 bg-white text-gray-500">or</span>
+      </div>
+    </div>
+
+    <!-- Login Form -->
+    <form @submit.prevent="handleSubmit" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Email/Phone Number</label>
+        <input 
+          v-model="form.email"
+          type="text"
+          :class="[
+            'mt-1 block w-full rounded-lg border px-3 py-3.5 border-[0.5px] outline-none',
+            errors.email ? 'border-red-300' : 'border-gray-300'
+          ]"
+          placeholder="Enter your email or phone number"
+        />
+        <p v-if="errors.email" class="mt-1 text-sm text-red-600">{{ errors.email }}</p>
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700">Password</label>
+        <div class="relative">
+          <input 
+            v-model="form.password"
+            :type="showPassword ? 'text' : 'password'"
+            :class="[
+              'mt-1 block w-full rounded-lg border px-3 py-3.5 border-[0.5px] outline-none pr-10',
+              errors.password ? 'border-red-300' : 'border-gray-300'
+            ]"
+            placeholder="Enter your password"
+          />
+          <button 
+            type="button"
+            @click="showPassword = !showPassword"
+            class="absolute inset-y-0 right-0 pr-3 flex items-center"
+          >
+            <EyeIcon v-if="showPassword" class="w-5 h-5 text-gray-400" />
+            <EyeClosedIcon v-else class="w-5 h-5 text-gray-400" />
           </button>
         </div>
-        <div class="hidden lg:flex lg:gap-x-3">
-          <!-- {{ router.currentRoute.fullPath }} -->
-          <!-- {{ route }} -->
-          <NuxtLink to="/" class="text-sm/6 flex justify-center items-center font-semibold bg-black/50 text-white">Home</NuxtLink>
-          <NuxtLink to="/services" class="text-sm/6 flex px-5 rounded-full justify-center items-center font-semibold bg-black/50 text-white">Services</NuxtLink>
-          <NuxtLink to="/projects" class="text-sm/6 flex px-5 rounded-full justify-center items-center font-semibold bg-black/50 text-white">Projects</NuxtLink>
-          <!-- <a href="#contact-us" class="text-sm/6 font-semibold text-white bg-[#444CE7] contact-link">Contact us</a> -->
-          <button onclick="document.getElementById('contact-us').scrollIntoView({ behavior: 'smooth' });" class="text-sm/6 flex px-5 rounded-full justify-center items-center font-semibold bg-black/50 text-white">Contact Us</button>
-        </div>
-        <!-- <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-          <a href="#" class="text-sm/6 font-semibold text-white">Log in <span aria-hidden="true">&rarr;</span></a>
-        </div> -->
-      </nav>
-      <!-- Mobile menu, show/hide based on menu open state. -->
-      <div v-if="isMenuOpen" class="lg:hidden" role="dialog" aria-modal="true">
-        <!-- Background backdrop, show/hide based on slide-over state. -->
-        <div class="fixed inset-0 z-50"></div>
-        <div class="fixed inset-y-0 right-0 z-50 w-full overflow-y-auto bg-gray-900 px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-white/10">
-          <div class="flex items-center justify-between">
-            <a href="#" class="-m-1.5 p-1.5">
-              <span class="sr-only">Your Company</span>
-              <img class="h-8 w-auto" src="@/assets/icons/white-logo.svg" alt="">
-            </a>
-            <button @click="isMenuOpen = false" type="button" class="-m-2.5 rounded-md p-2.5 text-gray-400">
-              <span class="sr-only">Close menu</span>
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
-            </button>
-          </div>
-          <div class="mt-6 flow-root">
-            <div class="-my-6 divide-y divide-gray-500/25">
-              <div class="space-y-2 py-6">
-                <NuxtLink to="/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-gray-800">Home</NuxtLink>
-                <NuxtLink to="/services" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-gray-800">Services</NuxtLink>
-                <NuxtLink to="/projects" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-gray-800">Projects</NuxtLink>
-                <!-- <NuxtLink to="/" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white hover:bg-gray-800">Contact Us</NuxtLink> -->
-                <button onclick="document.getElementById('contact-us').scrollIntoView({ behavior: 'smooth' });" class="-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-white">Contact Us</button>
-              </div>
-              <!-- <div class="py-6">
-                <a href="#" class="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-white hover:bg-gray-800">Log in</a>
-              </div> -->
-            </div>
-          </div>
-        </div>
+        <p v-if="errors.password" class="mt-1 text-sm text-red-600">{{ errors.password }}</p>
       </div>
-    </header>
 
-    <div class="relative isolate overflow-hidden pt-32 pb-[171px]">
-      <img src="@/assets/img/cta-bg.png" alt="" class="absolute inset-0 -z-10 h-full w-full object-cover">
-      <div class="mx-auto max-w-7xl px-6 lg:px-8">
-        <div class="mx-auto">
-          <div class="text-center">
-            <div class="px-4 sm:px-6 lg:px-8">
-              <h1 
-                data-aos="fade-up" 
-                class="text-balance text-3xl sm:text-3xl md:text-5xl lg:text-6xl font-semibold tracking-tight text-white text-center">
-                Build the future of your business
-              </h1>
-              <p 
-                data-aos="fade-up" 
-                class="mt-4 sm:mt-6 md:mt-8 lg:mt-10 text-sm sm:text-base md:text-lg lg:text-xl font-semibold text-white text-center">
-                Your Vision, Our Mission — Together, We’ll Build Exceptional Software
-              </p>
-            </div>
-            <div data-aos="fade-up" class="mt-10 flex items-center justify-center gap-x-6">
-              <a
-                  href="#contact-us"
-                  class="rounded-full bg-[#444CE7] px-6 py-3 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#444CE7]"
-                >
-                  Ready to Build
-                </a>
-            </div>
-          </div>
-        </div>
+      <div class="flex items-center justify-between">
+        <label class="flex items-center">
+          <input 
+            v-model="form.rememberMe"
+            type="checkbox"
+            class="rounded border-gray-300 text-blue-600"
+          />
+          <span class="ml-2 text-sm text-gray-600">Remember me</span>
+        </label>
+        <NuxtLink 
+          to="/forgot-password"
+          class="text-sm text-blue-600 hover:text-blue-500"
+        >
+          Forgot password?
+        </NuxtLink>
       </div>
-      </div>
-    </div>
 
-    <!-- <WhiteNav class="mb-10 z-50" shade="default" />
-    <div class="relative isolate overflow-hidden border-4">
-      <img
-        src="@/assets/img/hero-section.png"
-        alt=""
-        class="absolute inset-0 -z-10 h-full w-screen  object-cover"
-      />
-      <div class="mx-auto max-w-7xl px-6 lg:px-8">
-        <div class="mx-auto max-w-2xl py-32 sm:py-48 lg:py-56">
-          <div class="text-center flex justify-center items-center flex-col">
-            <h1
-              data-aos="fade-up"
-              class="text-balance text-5xl font-semibold tracking-tight text-white"
-            >
-              Build the future of your business
-            </h1>
-            <p
-              class="text-pretty flex justify-center items-center text-center text-lg text-white sm:text-xl/8"
-            >
-              Your Vision, Our Mission — Together, We’ll Build Exceptional
-              Software
-            </p>
-            <div
-              data-aos="fade-up"
-              class="mt-10 flex items-center justify-center gap-x-6"
-            >
-              <a
-                href="#contact-us"
-                class="rounded-full bg-[#444CE7] px-6 py-3 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#444CE7]"
-              >
-                Ready to Build
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
-
-    <MarqueeBanner />
-
-   <section class="">
-    <div class="bg-white">
-      <div
-        data-aos="fade-up"
-        class="max-w-3xl px-6 lg:px-0 mx-auto flex-col items-center flex justify-center items-center w-full mt-20"
+      <button 
+        type="submit"
+        :disabled="isLoading"
+        class="w-full bg-blue-600 text-white rounded-lg px-4 py-3 hover:bg-blue-700 disabled:opacity-50"
       >
-        <h2
-          class="text-2xl lg:text-3xl text-center font-bold tracking-tight text-[#161616]"
-        >
-          Innovation That Accelerates Your Growth
-        </h2>
-        <p
-          class="mt-4 text-center text-semibold text-[#161616] text-lg leading-loose max-w-lg mx-auto text-center"
-        >
-          <span class="hover:text-[#444CE7] transition-colors duration-300"
-            >We
-          </span>
-          <span class="hover:text-[#444CE7] transition-colors duration-300"
-            >turn
-          </span>
-          <span class="hover:text-[#444CE7] transition-colors duration-300"
-            >ambitious
-          </span>
-          <span class="hover:text-[#444CE7] transition-colors duration-300"
-            >ideas
-          </span>
-          <span class="hover:text-[#444CE7] transition-colors duration-300"
-            >into
-          </span>
-          <span class="hover:text-[#444CE7] transition-colors duration-300"
-            >high-performing
-          </span>
-          <span class="hover:text-[#444CE7] transition-colors duration-300"
-            >digital
-          </span>
-          <span class="hover:text-[#444CE7] transition-colors duration-300"
-            >products.
-          </span>
-          <span class="hover:text-[#444CE7] transition-colors duration-300"
-            >Through
-          </span>
-          <span class="hover:text-[#444CE7] transition-colors duration-300"
-            >innovative
-          </span>
-          <span class="hover:text-[#444CE7] transition-colors duration-300"
-            >tech
-          </span>
-          <span class="hover:text-[#444CE7] transition-colors duration-300"
-            >and
-          </span>
-          <span class="hover:text-[#444CE7] transition-colors duration-300"
-            >agile
-          </span>
-          <span class="hover:text-[#444CE7] transition-colors duration-300"
-            >development,
-          </span>
-          <span class="hover:text-[#444CE7] transition-colors duration-300"
-            >we
-          </span>
-          <span class="hover:text-[#444CE7] transition-colors duration-300"
-            >help
-          </span>
-          <span class="hover:text-[#444CE7] transition-colors duration-300"
-            >you
-          </span>
-          <span class="hover:text-[#444CE7] transition-colors duration-300"
-            >move
-          </span>
-          <span class="hover:text-[#444CE7] transition-colors duration-300"
-            >faster,
-          </span>
-          <span class="hover:text-[#444CE7] transition-colors duration-300"
-            >scale
-          </span>
-          <span class="hover:text-[#444CE7] transition-colors duration-300"
-            >smarter,
-          </span>
-          <span class="hover:text-[#444CE7] transition-colors duration-300"
-            >and
-          </span>
-          <span class="hover:text-[#444CE7] transition-colors duration-300"
-            >stay
-          </span>
-          <span class="hover:text-[#444CE7] transition-colors duration-300"
-            >ahead
-          </span>
-          <span class="hover:text-[#444CE7] transition-colors duration-300"
-            >of
-          </span>
-          <span class="hover:text-[#444CE7] transition-colors duration-300"
-            >the
-          </span>
-          <span class="hover:text-[#444CE7] transition-colors duration-300"
-            >competition.
-          </span>
-        </p>
-      </div>
+        <span v-if="isLoading">
+          <icon-loader class="animate-spin w-5 h-5 mx-auto" />
+        </span>
+        <span v-else>Sign In</span>
+      </button>
+    </form>
 
-      <div
-        data-aos="fade-up"
-        class="max-w-3xl mx-auto flex-col items-center flex justify-center items-center w-full mt-20"
+    <p class="mt-6 text-center text-sm text-gray-600">
+      Don't have an account?
+      <NuxtLink 
+        to="/register"
+        class="text-blue-600 hover:text-blue-500"
       >
-        <p
-          class="mt-4 text-[#7C7C7C] leading-loose max-w-lg mx-auto text-center"
-        >
-          OUR SERVICES
-        </p>
-        <h2 class="text-3xl font-bold tracking-tight text-[#161616]">
-          What we offer
-        </h2>
-      </div>
-
-      <!-- <CoreContact /> -->
-       <!-- <CoreTestContact /> -->
-
-      <div class="max-w-7xl px-6 mx-auto">
-        <div class="">
-          <div class="mt-16 grid grid-cols-1 gap-x-6 gap-y-6 lg:grid-cols-3">
-            <div
-              data-aos="fade-up"
-              v-for="(item, idx) in offerings"
-              :key="idx"
-              class="sm:flex rounded-xl p-6 bg-gray-25 rounded-lg lg:block"
-            >
-              <div class="sm:shrink-0">
-                <img class="size-14" src="@/assets/icons/service.svg" alt="" />
-              </div>
-              <div class="mt-4 sm:ml-6 sm:mt-0 lg:ml-0 lg:mt-6">
-                <h3 class="text-lg font-bold text-gray-900">
-                  {{ item.title ?? "Nil" }}
-                </h3>
-                <p class="mt-2 leading-loose lg:leading-snug text-[#222222]">
-                  {{ item.desc }}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="text-center mt-20">
-          <NuxtLink
-            to="/services"
-            class="bg-[#444CE7] hover:bg-[#3A40C9] transition text-white px-8 py-3.5 rounded-full font-medium transition-colors duration-300"
-          >
-            View more
-          </NuxtLink>
-        </div>
-      </div>
-    </div>
-
-    <div class="pt-20">
-      <AllCaseStudies :limit="4" />
-    </div>
-    <div class="text-center my-20">
-          <NuxtLink
-            to="/projects"
-            class="bg-[#444CE7] hover:bg-[#3A40C9] transition text-white px-8 py-3.5 rounded-full font-medium transition-colors duration-300"
-          >
-            View more
-          </NuxtLink>
-        </div>
-    </section>
-   <WhyChooseUsSection />
-  <section class="mx-auto container px-6 pb-44">
-    <TestimonialCarousel />
-  </section>
-
-  </main>
+        Create an account
+      </NuxtLink>
+    </p>
+  </div>
 </template>
 
 <script setup lang="ts">
-  import storipod from '@/assets/img/covers/storipod.png'
-  import blackcountry from '@/assets/img/covers/blackcountry.png'
-  import iqly from '@/assets/img/covers/iqly.png'
-  import marketsquare from '@/assets/img/covers/marketsquare.png'
-  import novatoons from '@/assets/img/covers/novatoons.png'
-  import grabhub from '@/assets/img/covers/grabhub.png'
-const openNav = ref(false);
-const route = useRoute()
+import { ref, reactive } from 'vue'
+// import { useAuthStore } from '@/stores/auth'
+  import { EyeClosedIcon, EyeIcon } from 'lucide-vue-next'
+// import { IconEye, IconEyeOff, IconLoader } from '@iconify/vue'
+
+definePageMeta({
+  layout: 'auth'
+})
+
+// const authStore = useAuthStore()
 const router = useRouter()
-const offerings = ref([
-  {
-    title: "Custom software development",
-    desc: `We follow a meticulous product management process to create
-                  innovative solutions that address the specific needs of our users. From ideation to launch, we
-                  prioritize user research, design thinking, and agile development to build products that make a
-                  difference.`,
-  },
-  {
-    title: "UI/UX design and product strategy",
-    desc: `We understand the importance of a seamless user experience, where
-                  we focuses on creating user-friendly navigation, engaging UX/UI design, and optimizing conversions
-                  through relevant content and consistent branding.`,
-  },
-  {
-    title: "Cloud & infrastructure consulting",
-    desc: `We offer cutting-edge software development services that drive
-                  business growth and innovation. Our team of experts specializes in creating robust web and mobile
-                  applications tailored to meet the unique needs of your business`,
-  },
-]);
 
-const isMenuOpen = ref(false);
+const form = reactive({
+  email: '',
+  password: '',
+  rememberMe: false
+})
 
+const errors = reactive({
+  email: '',
+  password: ''
+})
 
-const cards = ref([
-  {
-    title: "BlackCountry",
-    description: "Simplifying Shared Living in Uganda",
-    image: blackcountry
-  },
-  {
-    title: "IQly",
-    description: "Revolutionizing Job Searches with an AI-Driven Career Platform",
-    image: iqly
-  },
-  {
-    title: "Grabhub",
-    description: "Addressing Food Waste with an Innovative Marketplace",
-    image: grabhub
-  },
-  {
-    title: "Marketsquare",
-    description: "Connecting Local Services with Ease",
-    image: marketsquare
-  },
-  {
-    title: "BlackCountry",
-    description: "Simplifying Shared Living in Nigeria",
-    image: novatoons
-  },
-  {
-    title: "Storipod",
-    description: "Revolutionizing Microblogging for Storytellers",
-    image: storipod
-  },
-])
-</script>
+const isLoading = ref(false)
+const showPassword = ref(false)
 
-<style scoped>
-.router-link-exact-active {
-  background-color: #444CE7; /* Matches the blue color */
-  color: white; /* White text */
-  border-radius: 20px; /* Rounded edges */
-  font-weight: bold; /* Ensures the text is bold */
-  padding: 8px 20px;
+const validateForm = () => {
+  let isValid = true
+  errors.email = ''
+  errors.password = ''
+
+  if (!form.email) {
+    errors.email = 'Email or phone number is required'
+    isValid = false
+  }
+
+  if (!form.password) {
+    errors.password = 'Password is required'
+    isValid = false
+  }
+
+  return isValid
 }
 
-</style>
+const handleSubmit = async () => {
+  if (!validateForm()) return
+
+  try {
+    isLoading.value = true
+    // await authStore.login({
+    //   email: form.email,
+    //   password: form.password,
+    //   rememberMe: form.rememberMe
+    // })
+    router.push('/dashboard')
+  } catch (error: any) {
+    errors.email = error.message
+  } finally {
+    isLoading.value = false
+  }
+}
+
+const signInWithGoogle = async () => {
+  try {
+    isLoading.value = true
+    // await authStore.loginWithGoogle()
+    router.push('/dashboard')
+  } catch (error: any) {
+    console.error('Google sign-in failed:', error)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+const signInWithFacebook = async () => {
+  try {
+    isLoading.value = true
+    // await authStore.loginWithFacebook()
+    router.push('/dashboard')
+  } catch (error: any) {
+    console.error('Facebook sign-in failed:', error)
+  } finally {
+    isLoading.value = false
+  }
+}
+</script>
