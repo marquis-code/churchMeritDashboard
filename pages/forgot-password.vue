@@ -2,7 +2,7 @@
     <div class="flex items-center justify-center">
       <div class="max-w-md w-full space-y-8 bg-white p-8 rounded-lg shadow-lg">
         <div class="text-center">
-          <img class="mx-auto h-20 w-auto" src="/logo.svg" alt="ChurchRemit Logo" />
+          <!-- <img class="mx-auto h-20 w-auto" src="/logo.svg" alt="ChurchRemit Logo" /> -->
           <h2 class="mt-6 text-xl font-extrabold text-gray-900">Reset your password</h2>
           <p class="mt-2 text-sm text-gray-600">
             Enter your email or phone number and we'll send you a code to reset your password

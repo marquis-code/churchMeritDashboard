@@ -25,11 +25,11 @@
                 Live Now
               </div>
               <div class="relative aspect-video bg-gray-100 dark:bg-gray-700">
-                <img
+                <!-- <img
                   src="/placeholder.svg?height=200&width=400"
                   alt="Sunday Service Live Stream"
                   class="h-full w-full object-cover"
-                />
+                /> -->
                 <div class="absolute inset-0 flex items-center justify-center">
                   <button class="rounded-full bg-white/80 p-3 text-gray-900 hover:bg-white dark:bg-gray-800/80 dark:text-white dark:hover:bg-gray-800">
                     <PlayIcon class="h-8 w-8" />
@@ -59,11 +59,11 @@
             <!-- Upcoming stream cards -->
             <div v-for="(stream, index) in upcomingStreams" :key="index" class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm dark:border-gray-700 dark:bg-gray-800">
               <div class="relative aspect-video bg-gray-100 dark:bg-gray-700">
-                <img
+                <!-- <img
                   :src="`/placeholder.svg?height=200&width=400&text=${encodeURIComponent(stream.title)}`"
                   :alt="stream.title"
                   class="h-full w-full object-cover"
-                />
+                /> -->
                 <div class="absolute inset-0 flex items-center justify-center">
                   <div class="rounded-md bg-white/80 px-3 py-1 text-sm font-medium text-gray-900 dark:bg-gray-800/80 dark:text-white">
                     {{ stream.date }} • {{ stream.time }}

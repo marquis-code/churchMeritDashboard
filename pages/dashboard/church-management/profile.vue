@@ -24,7 +24,7 @@
               <dd class="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
                 <div class="flex items-center">
                   <div class="flex-shrink-0 h-20 w-20">
-                    <img class="h-20 w-20 rounded-full" src="/placeholder.svg?height=80&width=80" alt="Church Logo" />
+                    <!-- <img class="h-20 w-20 rounded-full" src="/placeholder.svg?height=80&width=80" alt="Church Logo" /> -->
                   </div>
                   <div class="ml-4 flex-1">
                     <div class="relative rounded-md shadow-sm">

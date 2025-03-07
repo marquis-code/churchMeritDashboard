@@ -584,7 +584,7 @@
     Search as SearchIcon,
     X as XIcon,
     Pencil as PencilIcon,
-    DotsVertical as DotsVerticalIcon
+    // DotsVertical as DotsVerticalIcon
   } from 'lucide-vue-next';
 
   definePageMeta({
