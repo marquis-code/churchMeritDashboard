@@ -13,33 +13,42 @@
     ></div>
 
     <!-- Sidebar content -->
-    <div class="flex h-full flex-col overflow-y-auto bg-white dark:bg-gray-800 shadow-lg">
+    <div class="flex h-full flex-col overflow-y-auto bg-white shadow-lg">
       <!-- Logo -->
-      <div class="flex h-16 items-center border-b border-gray-200 dark:border-gray-700 px-6">
+      <div class="flex h-16 items-center border-b border-gray-200 px-6">
         <div class="flex items-center gap-2">
           <div class="rounded-full bg-purple-600 p-1.5">
             <Church class="h-5 w-5 text-white" />
           </div>
-          <span class="text-xl font-semibold text-gray-900 dark:text-white">ChurchManager</span>
+          <span class="text-xl font-semibold text-gray-900">ChurchRemit</span>
         </div>
       </div>
 
       <!-- Navigation -->
-      <nav class="flex-1 space-y-1 px-4 py-4">
+      <nav class="flex-1 space-y-1 px-4 py-4 overflow-y-auto">
         <div v-for="(section, i) in navigation" :key="i" class="py-2">
-          <!-- Section header with toggle button -->
-          <button 
-            @click="toggleSection(i)"
-            class="flex w-full items-center justify-between px-3 py-2 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider hover:text-gray-700 dark:hover:text-gray-300"
-          >
-            <span>{{ section.name }}</span>
-            <ChevronDown 
-              :class="[
-                'h-4 w-4 transition-transform duration-200',
-                expandedSectionIndex === i ? 'rotate-180' : ''
-              ]" 
-            />
-          </button>
+          <!-- Section header with toggle button and navigation -->
+          <div class="flex w-full items-center justify-between">
+            <NuxtLink 
+              :to="section.href || '#'"
+              class="flex-grow px-3 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider hover:text-gray-700"
+              :class="[isActiveSectionRoute(section.href) ? 'text-purple-700' : '']"
+              @click.prevent="navigateToSection(section, i)"
+            >
+              <span>{{ section.name }}</span>
+            </NuxtLink>
+            <button 
+              @click.stop="toggleSection(i)"
+              class="px-2 py-2"
+            >
+              <ChevronDown 
+                :class="[
+                  'h-4 w-4 transition-transform duration-200',
+                  expandedSectionIndex === i ? 'rotate-180' : ''
+                ]" 
+              />
+            </button>
+          </div>
           
           <!-- Dropdown content with animation -->
           <transition
@@ -58,14 +67,14 @@
                 class="group flex items-center px-3 py-2 text-sm font-medium rounded-md ml-2"
                 :class="[
                   isActiveRoute(item.href)
-                    ? 'bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300'
-                    : 'text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700'
+                    ? 'bg-purple-100 text-purple-700'
+                    : 'text-gray-700 hover:bg-gray-100'
                 ]"
               >
                 <component :is="item.icon" class="mr-3 h-5 w-5 flex-shrink-0" :class="[
                   isActiveRoute(item.href)
-                    ? 'text-purple-600 dark:text-purple-400'
-                    : 'text-gray-500 dark:text-gray-400'
+                    ? 'text-purple-600'
+                    : 'text-gray-500'
                 ]" />
                 {{ item.name }}
               </NuxtLink>
@@ -75,7 +84,7 @@
       </nav>
 
       <!-- User profile -->
-      <div class="border-t border-gray-200 dark:border-gray-700 p-4">
+      <div class="border-t border-gray-200 p-4">
         <div class="flex items-center gap-3">
           <img
             src="https://randomuser.me/api/portraits/men/42.jpg"
@@ -83,8 +92,8 @@
             class="h-10 w-10 rounded-full"
           />
           <div>
-            <p class="text-sm font-medium text-gray-900 dark:text-white">Pastor John Doe</p>
-            <p class="text-xs text-gray-500 dark:text-gray-400">Admin</p>
+            <p class="text-sm font-medium text-gray-900">Pastor John Doe</p>
+            <p class="text-xs text-gray-500">Admin</p>
           </div>
         </div>
       </div>
@@ -104,7 +113,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import {
   Calendar,
   Video,
@@ -121,10 +130,22 @@ import {
   Menu,
   X,
   Church,
-  ChevronDown
+  ChevronDown,
+  BarChart2,
+  Database,
+  CreditCard,
+  Briefcase,
+  Settings,
+  User,
+  UserPlus,
+  GitBranch,
+  Mail,
+  MessageSquare,
+  Brain
 } from 'lucide-vue-next';
 
 const route = useRoute();
+const router = useRouter();
 const isOpen = ref(false);
 
 // Track which section is expanded (-1 means none)
@@ -141,63 +162,134 @@ const toggleSection = (index: number) => {
   }
 };
 
+// Navigate to section and handle dropdown
+const navigateToSection = (section: any, index: number) => {
+  // If section has a default href, navigate to it
+  if (section.href) {
+    router.push(section.href);
+  } 
+  // If no specific href, navigate to the first item in the section
+  else if (section.items && section.items.length > 0) {
+    router.push(section.items[0].href);
+  }
+  
+  // Always expand the section when navigating to it
+  expandedSectionIndex.value = index;
+};
+
 // Check if a route is active
 const isActiveRoute = (href: string): boolean => {
+  return route.path.includes(href);
+};
+
+// Check if a section route is active
+const isActiveSectionRoute = (href: string): boolean => {
+  if (!href) return false;
   return route.path.includes(href);
 };
 
 // Find and expand the section containing the active route
 const expandActiveSection = () => {
   for (let i = 0; i < navigation.length; i++) {
-    if (navigation[i].items.some(item => isActiveRoute(item.href))) {
+    if (
+      (navigation[i].href && isActiveSectionRoute(navigation[i].href)) || 
+      navigation[i].items.some(item => isActiveRoute(item.href))
+    ) {
       expandedSectionIndex.value = i;
       break;
     }
   }
 };
 
-// Navigation data
+// Updated navigation data with href properties for sections
 const navigation = [
   {
+    name: 'Dashboard',
+    href: '/dashboard', // Parent route for the section
+    items: [
+      { name: 'Admin Dashboard', href: '/dashboard/admin', icon: Settings },
+      { name: 'Finance Dashboard', href: '/dashboard/finance', icon: BarChart2 },
+    ],
+  },
+  {
+    name: 'Member Management',
+    href: '/dashboard/church', // Parent route for the section
+    items: [
+      { name: 'Church Profile Setup', href: '/dashboard/church/profile', icon: Church },
+      { name: 'Member & Staff Management', href: '/dashboard/church/members', icon: User },
+      { name: 'Branch Management', href: '/dashboard/church/branches', icon: GitBranch },
+    ],
+  },
+  {
     name: 'Event Management',
+    href: '/dashboard/events', // Parent route for the section
     items: [
-      { name: 'Event Scheduling', href: '/events/scheduling', icon: Calendar },
-      { name: 'Live Streaming & Media', href: '/events/media', icon: Video },
+      { name: 'Event Scheduling', href: '/dashboard/events', icon: Calendar },
+      { name: 'Live Streaming & Media', href: '/dashboard/events/media', icon: Video },
     ],
   },
   {
-    name: 'Volunteer & Workforce',
+    name: 'Volunteer Management',
+    href: '/dashboard/volunteer', // Parent route for the section
     items: [
-      { name: 'Volunteer Assignments', href: '/volunteers/assignments', icon: Users },
-      { name: 'Training & Certification', href: '/volunteers/training', icon: UserCheck },
+      { name: 'Volunteer Assignments', href: '/dashboard/volunteer/assignments', icon: Users },
+      { name: 'Training & Certification', href: '/dashboard/volunteer/training', icon: UserCheck },
     ],
   },
   {
-    name: 'Facility & Asset',
+    name: 'Facility Management',
+    href: '/dashboard/facilities', // Parent route for the section
     items: [
-      { name: 'Facility Booking', href: '/facilities/booking', icon: Building },
-      { name: 'Asset Tracking', href: '/facilities/assets', icon: Package },
+      { name: 'Facility Booking', href: '/dashboard/facilities', icon: Building },
+      { name: 'Asset Tracking', href: '/dashboard/facilities/assets', icon: Package },
     ],
   },
   {
     name: 'Member Engagement',
+    href: '/dashboard/members', // Parent route for the section
     items: [
-      { name: 'Small Groups', href: '/members/groups', icon: BookOpen },
-      { name: 'Automated Follow-ups', href: '/members/followups', icon: Bell },
+      { name: 'Group Management', href: '/dashboard/members', icon: BookOpen },
+      { name: 'Automated Follow-ups', href: '/dashboard/members/automated-followups', icon: Bell },
     ],
   },
   {
-    name: 'Legal & Compliance',
+    name: 'Legal Management',
+    href: '/dashboard/legal', // Parent route for the section
     items: [
-      { name: 'Document Storage', href: '/legal/documents', icon: FileText },
-      { name: 'Regulatory Compliance', href: '/legal/compliance', icon: AlertTriangle },
+      { name: 'Document Storage', href: '/dashboard/legal', icon: FileText },
+      { name: 'Regulatory Compliance', href: '/dashboard/legal/compliance', icon: AlertTriangle },
     ],
   },
   {
     name: 'Payments & Donations',
+    href: '/dashboard/payments', // Parent route for the section
     items: [
-      { name: 'Payment Collection', href: '/payments/collection', icon: DollarSign },
-      { name: 'Payment History', href: '/payments/history', icon: Receipt },
+      { name: 'Payment Collection', href: '/dashboard/payments/collection', icon: DollarSign },
+      { name: 'Payment History', href: '/dashboard/payments/history', icon: Receipt },
+    ],
+  },
+  {
+    name: 'Corporate Banking',
+    href: '/dashboard/banking', // Parent route for the section
+    items: [
+      { name: 'Bank Account Management', href: '/dashboard/banking/accounts', icon: Briefcase },
+      { name: 'Fund Transfers & Bills', href: '/dashboard/banking/transfers', icon: CreditCard },
+    ],
+  },
+  {
+    name: 'Analytics & Reporting',
+    href: '/dashboard/analytics', // Parent route for the section
+    items: [
+      { name: 'Financial Reports', href: '/dashboard/analytics/financial', icon: BarChart2 },
+      { name: 'AI-Powered Insights', href: '/dashboard/analytics/insights', icon: Brain },
+    ],
+  },
+  {
+    name: 'Notifications & Alerts',
+    href: '/dashboard/notifications', // Parent route for the section
+    items: [
+      { name: 'Email & SMS Alerts', href: '/dashboard/notifications/email-sms-alerts', icon: Mail },
+      { name: 'In-app Notifications', href: '/dashboard/notifications/in-app-notification', icon: MessageSquare },
     ],
   },
 ];
@@ -207,3 +299,4 @@ onMounted(() => {
   expandActiveSection();
 });
 </script>
+

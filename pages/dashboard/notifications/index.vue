@@ -1,171 +1,285 @@
-<!-- pages/notifications/index.vue -->
 <template>
-    <div class="container mx-auto px-4">
-      <h1 class="text-2xl font-bold mb-6">Notifications & Alerts</h1>
-  
-      <!-- Notification Center -->
-      <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-        <h2 class="text-xl font-semibold mb-4">Notification Center</h2>
-        <div class="space-y-4">
-          <div v-for="notification in notifications" :key="notification.id" 
-               class="flex items-start p-4 border rounded-lg hover:bg-gray-50 transition-colors">
-            <div class="flex-shrink-0 mr-4">
-              <icon-bell v-if="notification.type === 'alert'" class="w-6 h-6 text-yellow-500" />
-              <icon-mail v-else-if="notification.type === 'message'" class="w-6 h-6 text-blue-500" />
-              <icon-info v-else class="w-6 h-6 text-gray-500" />
+  <div class="space-y-8">
+    <!-- Welcome Section -->
+    <section 
+      class="bg-gradient-to-r from-emerald-500 to-teal-500 rounded-xl p-8 shadow-lg text-white appear-animation"
+    >
+      <h2 class="text-3xl font-bold">Welcome to the Notifications & Alerts Dashboard</h2>
+      <p class="mt-4 text-lg max-w-3xl">
+        Manage all your notification settings and preferences from one central location. 
+        Use the sidebar to navigate between different notification types.
+      </p>
+      <div class="mt-6 flex flex-wrap gap-4">
+        <NuxtLink 
+          to="/dashboard/notifications/email-sms-alerts" 
+          class="inline-flex items-center px-6 py-3 bg-white text-emerald-700 rounded-lg font-medium shadow-md hover:shadow-lg transform hover:-translate-y-1 transition duration-300"
+        >
+          <Icon name="heroicons:envelope" class="mr-2 h-5 w-5" />
+          Email & SMS Alerts
+        </NuxtLink>
+        <NuxtLink 
+          to="/dashboard/notifications/in-app-notification"
+          class="inline-flex items-center px-6 py-3 bg-white text-emerald-700 rounded-lg font-medium shadow-md hover:shadow-lg transform hover:-translate-y-1 transition duration-300"
+        >
+          <Icon name="heroicons:bell" class="mr-2 h-5 w-5" />
+          In-app Notifications
+        </NuxtLink>
+      </div>
+    </section>
+    
+    <!-- Stats Overview -->
+    <section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <StatCard 
+        v-for="(stat, index) in stats" 
+        :key="index"
+        :icon="stat.icon"
+        :title="stat.title"
+        :value="stat.value"
+        :change="stat.change"
+        :color="stat.color"
+        :style="{ animationDelay: `${index * 100}ms` }"
+        class="appear-animation"
+      />
+    </section>
+    
+    <!-- Quick Access Links -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6 appear-animation" style="animation-delay: 200ms">
+      <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Email & SMS Alerts</h3>
+        
+        <ul class="space-y-3">
+          <li v-for="(item, index) in emailSmsFeatures" :key="index" 
+              class="flex items-start p-3 hover:bg-gray-50 rounded-md transition-colors duration-150">
+            <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg" :class="item.color">
+              <Icon :name="item.icon" class="h-5 w-5 text-white" />
             </div>
-            <div class="flex-grow">
-              <h3 class="font-medium">{{ notification.title }}</h3>
-              <p class="text-gray-600">{{ notification.message }}</p>
-              <p class="text-sm text-gray-500 mt-1">{{ formatDate(notification.timestamp) }}</p>
+            <div class="ml-4">
+              <h4 class="text-base font-medium text-gray-900">{{ item.title }}</h4>
+              <p class="mt-1 text-sm text-gray-500">{{ item.description }}</p>
             </div>
-            <button @click="markAsRead(notification.id)" class="text-blue-500 hover:text-blue-600">
-              Mark as read
-            </button>
-          </div>
+          </li>
+        </ul>
+        
+        <div class="mt-6">
+          <NuxtLink 
+            to="/dashboard/notifications/email-sms-alerts" 
+            class="inline-flex items-center text-emerald-600 hover:text-emerald-700 font-medium"
+          >
+            <span>Manage Email & SMS Alerts</span>
+            <Icon name="heroicons:arrow-right" class="ml-2 h-4 w-4" />
+          </NuxtLink>
         </div>
       </div>
-  
-      <!-- Notification Preferences -->
-      <div class="bg-white rounded-lg shadow-md p-6 mb-8">
-        <h2 class="text-xl font-semibold mb-4">Notification Preferences</h2>
-        <div class="space-y-6">
-          <div v-for="category in notificationCategories" :key="category.id" class="border-b pb-4">
-            <h3 class="font-medium mb-2">{{ category.name }}</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div v-for="setting in category.settings" :key="setting.id" class="flex items-center justify-between">
-                <span>{{ setting.name }}</span>
-                <div class="flex items-center space-x-4">
-                  <label class="flex items-center cursor-pointer">
-                    <input type="checkbox" v-model="setting.email" class="sr-only peer">
-                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                    <span class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Email</span>
-                  </label>
-                  <label class="flex items-center cursor-pointer">
-                    <input type="checkbox" v-model="setting.sms" class="sr-only peer">
-                    <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-                    <span class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">SMS</span>
-                  </label>
-                </div>
+      
+      <div class="bg-white p-6 rounded-xl shadow-md border border-gray-100">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">In-app Notifications</h3>
+        
+        <ul class="space-y-3">
+          <li v-for="(item, index) in inAppFeatures" :key="index" 
+              class="flex items-start p-3 hover:bg-gray-50 rounded-md transition-colors duration-150">
+            <div class="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg" :class="item.color">
+              <Icon :name="item.icon" class="h-5 w-5 text-white" />
+            </div>
+            <div class="ml-4">
+              <h4 class="text-base font-medium text-gray-900">{{ item.title }}</h4>
+              <p class="mt-1 text-sm text-gray-500">{{ item.description }}</p>
+            </div>
+          </li>
+        </ul>
+        
+        <div class="mt-6">
+          <NuxtLink 
+            to="/dashboard/notifications/in-app-notification" 
+            class="inline-flex items-center text-emerald-600 hover:text-emerald-700 font-medium"
+          >
+            <span>Manage In-app Notifications</span>
+            <Icon name="heroicons:arrow-right" class="ml-2 h-4 w-4" />
+          </NuxtLink>
+        </div>
+      </div>
+    </section>
+    
+    <!-- Recent Activity -->
+    <section class="bg-white rounded-xl shadow-md border border-gray-100 p-6 appear-animation" style="animation-delay: 300ms">
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
+      
+      <div class="overflow-hidden">
+        <ul class="divide-y divide-gray-200">
+          <li v-for="(activity, index) in recentActivities" :key="index" 
+              class="py-4 flex items-start space-x-4 animate-slide-in" 
+              :style="{ animationDelay: `${index * 100}ms` }">
+            <div class="flex-shrink-0">
+              <div class="w-10 h-10 flex items-center justify-center rounded-full" :class="activity.color">
+                <Icon :name="activity.icon" class="h-5 w-5 text-white" />
               </div>
             </div>
-          </div>
-        </div>
-        <button @click="savePreferences" class="mt-6 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
-          Save Preferences
-        </button>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium text-gray-900">{{ activity.title }}</p>
+              <p class="text-sm text-gray-500">{{ activity.description }}</p>
+            </div>
+            <div class="flex-shrink-0 text-sm text-gray-500">
+              {{ activity.time }}
+            </div>
+          </li>
+        </ul>
       </div>
-  
-      <!-- In-app Notification Settings -->
-      <div class="bg-white rounded-lg shadow-md p-6">
-        <h2 class="text-xl font-semibold mb-4">In-app Notification Settings</h2>
-        <div class="space-y-4">
-          <div v-for="setting in inAppSettings" :key="setting.id" class="flex items-center justify-between">
-            <span>{{ setting.name }}</span>
-            <label class="flex items-center cursor-pointer">
-              <input type="checkbox" v-model="setting.enabled" class="sr-only peer">
-              <div class="relative w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
-              <span class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Enabled</span>
-            </label>
-          </div>
-        </div>
-        <button @click="saveInAppSettings" class="mt-6 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors">
-          Save In-app Settings
-        </button>
-      </div>
-    </div>
-  </template>
-  
-  <script setup lang="ts">
-  import { ref } from 'vue'
-  // import { IconBell, IconMail, IconInfo } from '@iconify/vue'
-  
-  const notifications = ref([
-    {
-      id: 1,
-      type: 'alert',
-      title: 'New Donation Received',
-      message: 'A donation of $500 has been received from John Doe.',
-      timestamp: new Date('2025-03-06T10:30:00')
-    },
-    {
-      id: 2,
-      type: 'message',
-      title: 'Upcoming Event Reminder',
-      message: 'Don\'t forget about the charity fundraiser this Saturday at 2 PM.',
-      timestamp: new Date('2025-03-05T15:45:00')
-    },
-    {
-      id: 3,
-      type: 'info',
-      title: 'System Maintenance',
-      message: 'The system will be undergoing maintenance on Sunday from 2 AM to 4 AM.',
-      timestamp: new Date('2025-03-04T09:00:00')
-    }
-  ])
-  
-  const notificationCategories = ref([
-    {
-      id: 1,
-      name: 'Donations',
-      settings: [
-        { id: 1, name: 'New Donations', email: true, sms: false },
-        { id: 2, name: 'Monthly Summary', email: true, sms: false }
-      ]
-    },
-    {
-      id: 2,
-      name: 'Events',
-      settings: [
-        { id: 3, name: 'Event Reminders', email: true, sms: true },
-        { id: 4, name: 'Event Changes', email: true, sms: false }
-      ]
-    },
-    {
-      id: 3,
-      name: 'Financial',
-      settings: [
-        { id: 5, name: 'Bill Due Reminders', email: true, sms: true },
-        { id: 6, name: 'Financial Reports', email: true, sms: false }
-      ]
-    }
-  ])
-  
-  const inAppSettings = ref([
-    { id: 1, name: 'Pending Approvals', enabled: true },
-    { id: 2, name: 'Remittance Notifications', enabled: true },
-    { id: 3, name: 'Fund Transfer Alerts', enabled: true },
-    { id: 4, name: 'System Updates', enabled: false }
-  ])
-  
-  const formatDate = (date: Date) => {
-    return date.toLocaleString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
-    })
-  }
-  
-  const markAsRead = (id: number) => {
-    const index = notifications.value.findIndex(n => n.id === id)
-    if (index !== -1) {
-      notifications.value.splice(index, 1)
-    }
-  }
+    </section>
+  </div>
+</template>
 
-  definePageMeta({
+<script setup lang="ts">
+// Define types for our data
+interface Stat {
+  icon: string;
+  title: string;
+  value: string;
+  change: string;
+  color: string;
+}
+
+interface Feature {
+  icon: string;
+  title: string;
+  description: string;
+  color: string;
+}
+
+interface Activity {
+  icon: string;
+  title: string;
+  description: string;
+  time: string;
+  color: string;
+}
+
+// Dashboard statistics
+const stats = ref<Stat[]>([
+  {
+    icon: 'heroicons:envelope',
+    title: 'Email Alerts',
+    value: '245',
+    change: '+12% from last month',
+    color: 'text-emerald-500'
+  },
+  {
+    icon: 'heroicons:device-phone-mobile',
+    title: 'SMS Alerts',
+    value: '132',
+    change: '+5% from last month',
+    color: 'text-blue-500'
+  },
+  {
+    icon: 'heroicons:bell',
+    title: 'In-app Notifications',
+    value: '387',
+    change: '+18% from last month',
+    color: 'text-purple-500'
+  },
+  {
+    icon: 'heroicons:user-group',
+    title: 'Subscribers',
+    value: '1,284',
+    change: '+8% from last month',
+    color: 'text-amber-500'
+  }
+])
+
+// Email & SMS features
+const emailSmsFeatures = ref<Feature[]>([
+  {
+    icon: 'heroicons:credit-card',
+    title: 'Donation Alerts',
+    description: 'Receive notifications when new donations are made',
+    color: 'bg-emerald-500'
+  },
+  {
+    icon: 'heroicons:banknotes',
+    title: 'Payment Notifications',
+    description: 'Get alerts for successful and failed payments',
+    color: 'bg-blue-500'
+  },
+  {
+    icon: 'heroicons:document-text',
+    title: 'Payroll Alerts',
+    description: 'Stay informed about payroll processing and completion',
+    color: 'bg-indigo-500'
+  }
+])
+
+// In-app features
+const inAppFeatures = ref<Feature[]>([
+  {
+    icon: 'heroicons:exclamation-circle',
+    title: 'Pending Approvals',
+    description: 'System-generated alerts for items requiring your approval',
+    color: 'bg-amber-500'
+  },
+  {
+    icon: 'heroicons:arrow-path',
+    title: 'Fund Transfers',
+    description: 'Get notified about remittances and fund transfers',
+    color: 'bg-purple-500'
+  },
+  {
+    icon: 'heroicons:cog-6-tooth',
+    title: 'System Updates',
+    description: 'Important notifications about system maintenance and updates',
+    color: 'bg-gray-500'
+  }
+])
+
+// Recent activities
+const recentActivities = ref<Activity[]>([
+  {
+    icon: 'heroicons:envelope',
+    title: 'Email Alert Sent',
+    description: 'Monthly donation report was emailed to john.doe@example.com',
+    time: '10 minutes ago',
+    color: 'bg-emerald-500'
+  },
+  {
+    icon: 'heroicons:device-phone-mobile',
+    title: 'SMS Alert Delivered',
+    description: 'Payment confirmation sent to +1-555-123-4567',
+    time: '45 minutes ago',
+    color: 'bg-blue-500'
+  },
+  {
+    icon: 'heroicons:bell',
+    title: 'New In-app Notification',
+    description: 'Funds transfer of $1,250.00 requires your approval',
+    time: '2 hours ago',
+    color: 'bg-purple-500'
+  },
+  {
+    icon: 'heroicons:cog-6-tooth',
+    title: 'Preferences Updated',
+    description: 'Notification settings were updated by Administrator',
+    time: '1 day ago',
+    color: 'bg-gray-500'
+  }
+])
+
+definePageMeta({
     layout: 'dashboard'
-  })
-  
-  const savePreferences = () => {
-    console.log('Saving notification preferences:', notificationCategories.value)
-    // Implement the logic to save preferences to the backend
+})
+</script>
+
+<style scoped>
+.animate-slide-in {
+  animation: slideIn 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
   }
-  
-  const saveInAppSettings = () => {
-    console.log('Saving in-app notification settings:', inAppSettings.value)
-    // Implement the logic to save in-app settings to the backend
+  to {
+    opacity: 1;
+    transform: translateX(0);
   }
-  </script>
+}
+</style>
+

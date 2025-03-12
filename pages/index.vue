@@ -91,16 +91,18 @@
         </NuxtLink>
       </div>
 
-      <button 
-        type="submit"
-        :disabled="isLoading"
-        class="w-full bg-blue-600 text-white rounded-lg px-4 py-3 hover:bg-blue-700 disabled:opacity-50"
-      >
-        <span v-if="isLoading">
-          <icon-loader class="animate-spin w-5 h-5 mx-auto" />
-        </span>
-        <span v-else>Sign In</span>
-      </button>
+        <div class="pt-5">
+          <button 
+              type="submit"
+              :disabled="isLoading"
+              class="w-full bg-blue-600 text-white rounded-lg px-4 py-3.5 hover:bg-blue-700 disabled:opacity-50"
+            >
+              <span v-if="isLoading">
+                <icon-loader class="animate-spin w-5 h-5 mx-auto" />
+              </span>
+              <span v-else>Sign In</span>
+            </button>
+        </div>
     </form>
 
     <p class="mt-6 text-center text-sm text-gray-600">

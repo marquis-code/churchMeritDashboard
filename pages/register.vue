@@ -13,7 +13,7 @@
             v-model="form.name"
             type="text"
             :class="[
-              'mt-1 block w-full rounded-lg border px-3 py-2.5 text-sm outline-none px-2',
+              'mt-1 block w-full rounded-lg border px-3 py-3 text-sm outline-none px-2',
               errors.name ? 'border-red-300' : 'border-gray-300'
             ]"
             placeholder="Enter your full name"
@@ -27,7 +27,7 @@
             v-model="form.email"
             type="email"
             :class="[
-              'mt-1 block w-full rounded-lg border px-3 py-2.5 text-sm outline-none px-2',
+              'mt-1 block w-full rounded-lg border px-3 py-3 text-sm outline-none px-2',
               errors.email ? 'border-red-300' : 'border-gray-300'
             ]"
             placeholder="Enter your email"
@@ -41,7 +41,7 @@
             v-model="form.churchName"
             type="text"
             :class="[
-              'mt-1 block w-full rounded-lg border px-3 py-2.5 text-sm outline-none px-2',
+              'mt-1 block w-full rounded-lg border px-3 py-3 text-sm outline-none px-2',
               errors.churchName ? 'border-red-300' : 'border-gray-300'
             ]"
             placeholder="Enter your church name"
@@ -55,7 +55,7 @@
             v-model="form.phone"
             type="tel"
             :class="[
-              'mt-1 block w-full rounded-lg border px-3 py-2.5 text-sm outline-none px-2',
+              'mt-1 block w-full rounded-lg border px-3 py-3 text-sm outline-none px-2',
               errors.phone ? 'border-red-300' : 'border-gray-300'
             ]"
             placeholder="Enter your phone number"
@@ -63,6 +63,7 @@
           <p v-if="errors.phone" class="mt-1 text-sm text-red-600">{{ errors.phone }}</p>
         </div>
   
+       <section class="grid grid-cols-2 gap-6">
         <div>
           <label class="block text-xs font-medium text-gray-700">Password</label>
           <div class="relative">
@@ -70,7 +71,7 @@
               v-model="form.password"
               :type="showPassword ? 'text' : 'password'"
               :class="[
-                'mt-1 block w-full rounded-lg border px-3 py-2.5 text-sm outline-none px-2 pr-10',
+                'mt-1 block w-full rounded-lg border px-3 py-3 text-sm outline-none px-2 pr-10',
                 errors.password ? 'border-red-300' : 'border-gray-300'
               ]"
               placeholder="Create a password"
@@ -93,20 +94,21 @@
             v-model="form.confirmPassword"
             type="password"
             :class="[
-              'mt-1 block w-full rounded-lg border px-3 py-2.5 text-sm outline-none px-2',
+              'mt-1 block w-full rounded-lg border px-3 py-3 text-sm outline-none px-2',
               errors.confirmPassword ? 'border-red-300' : 'border-gray-300'
             ]"
             placeholder="Confirm your password"
           />
           <p v-if="errors.confirmPassword" class="mt-1 text-sm text-red-600">{{ errors.confirmPassword }}</p>
         </div>
+       </section>
   
         <div>
           <label class="block text-xs font-medium text-gray-700">Account Type</label>
           <select 
             v-model="form.accountType"
             :class="[
-              'mt-1 block w-full rounded-lg border px-3 py-2.5 text-sm outline-none px-2',
+              'mt-1 block w-full rounded-lg border px-3 py-3 text-sm outline-none px-2',
               errors.accountType ? 'border-red-300' : 'border-gray-300'
             ]"
           >
@@ -136,7 +138,7 @@
         <button 
           type="submit"
           :disabled="isLoading"
-          class="w-full bg-blue-600 text-white text-sm rounded-lg px-4 py-2.5 hover:bg-blue-700 disabled:opacity-50"
+          class="w-full bg-blue-600 text-white text-sm rounded-lg px-4 py-3 hover:bg-blue-700 disabled:opacity-50"
         >
           <span v-if="isLoading">
             <Loader class="animate-spin  w-5 h-5 mx-auto" />
@@ -148,7 +150,7 @@
       <p class="mt-6 text-center text-sm text-gray-600">
         Already have an account?
         <NuxtLink 
-          to="/auth/login"
+          to="/login"
           class="text-blue-600 hover:text-blue-500"
         >
           Sign in

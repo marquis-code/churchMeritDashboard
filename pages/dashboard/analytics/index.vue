@@ -1,9 +1,9 @@
-<!-- pages/analytics/index.vue -->
+<!-- 
 <template>
     <div class="container mx-auto">
       <h1 class="text-xl font-semibold">Analytics & Reporting</h1>
   
-      <!-- Financial Health Dashboard -->
+ 
       <div class="bg-white rounded-lg shadow-md p-6 mb-8">
         <h2 class="text-xl font-semibold mb-4">Financial Health Dashboard</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
@@ -24,7 +24,7 @@
         </div>
       </div>
   
-      <!-- Custom Reports -->
+
       <div class="bg-white rounded-lg shadow-md p-6 mb-8">
         <h2 class="text-xl font-semibold mb-4">Custom Reports</h2>
         <div class="flex flex-wrap gap-4 mb-6">
@@ -49,7 +49,7 @@
               </button>
             </div>
           </div>
-          <!-- Placeholder for report data -->
+ 
           <table class="w-full">
             <thead>
               <tr class="bg-gray-50">
@@ -69,7 +69,7 @@
         </div>
       </div>
   
-      <!-- AI-Powered Insights -->
+
       <div class="bg-white rounded-lg shadow-md p-6">
         <h2 class="text-xl font-semibold mb-4">AI-Powered Insights</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -245,4 +245,227 @@
       })
     }
   })
+  </script> -->
+
+  <template>
+    <NuxtLayout name="analytics">
+      <div class="space-y-6">
+        <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div v-for="(stat, index) in stats" :key="index" 
+            class="transform transition-all duration-300 hover:scale-105 overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6"
+            :class="stat.color"
+          >
+            <div class="flex items-center">
+              <div class="flex-shrink-0">
+                <component :is="stat.icon" class="h-8 w-8 text-white" />
+              </div>
+              <div class="ml-5 w-0 flex-1">
+                <dt class="truncate text-sm font-medium text-white">{{ stat.name }}</dt>
+                <dd class="flex items-baseline">
+                  <div class="text-2xl font-semibold text-white">{{ stat.value }}</div>
+                  <div class="ml-2 flex items-baseline text-sm font-semibold" :class="stat.changeColor">
+                    <component :is="stat.changeType === 'increase' ? TrendingUp : TrendingDown" class="h-4 w-4 flex-shrink-0 self-center" />
+                    <span class="ml-1">{{ stat.change }}</span>
+                  </div>
+                </dd>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <div class="overflow-hidden rounded-lg bg-white shadow">
+            <div class="p-6">
+              <div class="flex items-center justify-between">
+                <h3 class="text-lg font-medium leading-6 text-gray-900">Recent Activity</h3>
+                <div class="flex space-x-3">
+                  <button class="rounded-md bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                    Today
+                  </button>
+                  <button class="rounded-md bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                    This Week
+                  </button>
+                  <button class="rounded-md bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                    This Month
+                  </button>
+                </div>
+              </div>
+              <div class="mt-6 flow-root">
+                <ul role="list" class="-my-5 divide-y divide-gray-200">
+                  <li v-for="(activity, index) in recentActivity" :key="index" class="py-4">
+                    <div class="flex items-center space-x-4">
+                      <div class="flex-shrink-0">
+                        <component :is="activity.icon" class="h-6 w-6" :class="activity.iconColor" />
+                      </div>
+                      <div class="min-w-0 flex-1">
+                        <p class="truncate text-sm font-medium text-gray-900">{{ activity.title }}</p>
+                        <p class="truncate text-sm text-gray-500">{{ activity.description }}</p>
+                      </div>
+                      <div>
+                        <span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium" :class="activity.badgeColor">
+                          {{ activity.time }}
+                        </span>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="mt-6">
+                <NuxtLink to="/dashboard/analytics/financial" class="flex w-full items-center justify-center rounded-md bg-purple-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-purple-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-purple-600">
+                  View all reports
+                </NuxtLink>
+              </div>
+            </div>
+          </div>
+  
+          <div class="overflow-hidden rounded-lg bg-white shadow">
+            <div class="p-6">
+              <div class="flex items-center justify-between">
+                <h3 class="text-lg font-medium leading-6 text-gray-900">AI Insights</h3>
+                <span class="inline-flex items-center rounded-md bg-blue-50 px-2 py-1 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-700/10">
+                  New
+                </span>
+              </div>
+              <div class="mt-6 flow-root">
+                <ul role="list" class="-my-5 divide-y divide-gray-200">
+                  <li v-for="(insight, index) in aiInsights" :key="index" class="py-4">
+                    <div class="flex items-center space-x-4">
+                      <div class="flex-shrink-0">
+                        <component :is="insight.icon" class="h-6 w-6 text-blue-500" />
+                      </div>
+                      <div class="min-w-0 flex-1">
+                        <p class="truncate text-sm font-medium text-gray-900">{{ insight.title }}</p>
+                        <p class="truncate text-sm text-gray-500">{{ insight.description }}</p>
+                      </div>
+                      <div>
+                        <button class="rounded-full bg-white p-1 text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2">
+                          <ChevronRight class="h-5 w-5" />
+                        </button>
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <div class="mt-6">
+                <NuxtLink to="/dashboard/analytics/insights" class="flex w-full items-center justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                  View all insights
+                </NuxtLink>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </NuxtLayout>
+  </template>
+  
+  <script setup lang="ts">
+  import { 
+    DollarSign, 
+    Users, 
+    Calendar, 
+    TrendingUp, 
+    TrendingDown, 
+    ChevronRight,
+    Brain,
+    AlertTriangle,
+    BarChart2,
+    CreditCard
+  } from 'lucide-vue-next';
+  
+  const stats = [
+    { 
+      name: 'Total Donations', 
+      value: '$24,765', 
+      change: '12%', 
+      changeType: 'increase',
+      changeColor: 'text-green-100',
+      icon: DollarSign,
+      color: 'bg-gradient-to-r from-purple-600 to-purple-700'
+    },
+    { 
+      name: 'Attendance', 
+      value: '1,432', 
+      change: '8%', 
+      changeType: 'increase',
+      changeColor: 'text-green-100',
+      icon: Users,
+      color: 'bg-gradient-to-r from-blue-600 to-blue-700'
+    },
+    { 
+      name: 'Expenses', 
+      value: '$18,230', 
+      change: '3%', 
+      changeType: 'decrease',
+      changeColor: 'text-red-100',
+      icon: CreditCard,
+      color: 'bg-gradient-to-r from-red-600 to-red-700'
+    },
+    { 
+      name: 'Events', 
+      value: '24', 
+      change: '5%', 
+      changeType: 'increase',
+      changeColor: 'text-green-100',
+      icon: Calendar,
+      color: 'bg-gradient-to-r from-green-600 to-green-700'
+    }
+  ];
+  
+  const recentActivity = [
+    {
+      title: 'Monthly Financial Report',
+      description: 'March 2025 financial summary is ready for review',
+      time: 'Just now',
+      icon: BarChart2,
+      iconColor: 'text-purple-500',
+      badgeColor: 'bg-green-100 text-green-800'
+    },
+    {
+      title: 'Donation Export',
+      description: 'Q1 donation data exported to Excel',
+      time: '2h ago',
+      icon: DollarSign,
+      iconColor: 'text-green-500',
+      badgeColor: 'bg-blue-100 text-blue-800'
+    },
+    {
+      title: 'Attendance Report',
+      description: 'Weekly attendance report generated',
+      time: '1d ago',
+      icon: Users,
+      iconColor: 'text-blue-500',
+      badgeColor: 'bg-gray-100 text-gray-800'
+    },
+    {
+      title: 'Payroll Summary',
+      description: 'Staff payroll report for March completed',
+      time: '2d ago',
+      icon: CreditCard,
+      iconColor: 'text-yellow-500',
+      badgeColor: 'bg-gray-100 text-gray-800'
+    }
+  ];
+  
+  const aiInsights = [
+    {
+      title: 'Donation Pattern Detected',
+      description: 'Donations increase by 24% after community events',
+      icon: Brain
+    },
+    {
+      title: 'Budget Optimization',
+      description: 'Potential 15% cost savings in facility management',
+      icon: BarChart2
+    },
+    {
+      title: 'Unusual Transaction Alert',
+      description: 'Multiple large transactions detected outside normal patterns',
+      icon: AlertTriangle
+    },
+    {
+      title: 'Engagement Recommendation',
+      description: 'Increase member retention with targeted follow-ups',
+      icon: Users
+    }
+  ];
   </script>
