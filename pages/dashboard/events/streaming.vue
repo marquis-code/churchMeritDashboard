@@ -1,5 +1,5 @@
 <template>
-    <NuxtLayout name="events">
+    <main>
       <div class="space-y-6 animate-fade-in">
         <!-- Page header -->
         <div class="flex flex-col md:flex-row md:items-center md:justify-between">
@@ -13,7 +13,7 @@
               @click="showCreateStreamModal = true"
               class="inline-flex items-center justify-center rounded-md bg-blue-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
             >
-              <VideoPlus class="mr-2 h-4 w-4" />
+              <Video class="mr-2 h-4 w-4" />
               New Stream
             </button>
   
@@ -162,7 +162,7 @@
                   class="relative bg-white overflow-hidden rounded-lg border-2 border-dashed border-gray-300 p-6 flex flex-col items-center justify-center text-center hover:border-blue-500 hover:bg-blue-50 transition-colors duration-300 cursor-pointer h-[240px]"
                 >
                   <div class="rounded-full bg-blue-100 p-3 mb-4">
-                    <VideoPlus class="h-8 w-8 text-blue-600" />
+                    <Video class="h-8 w-8 text-blue-600" />
                   </div>
                   <h3 class="text-lg font-semibold text-gray-900">Create New Stream</h3>
                   <p class="mt-2 text-sm text-gray-500">
@@ -766,7 +766,7 @@
                   controls
                   class="max-w-full max-h-full"
                   :src="selectedMedia.videoUrl || '#'"
-                  poster="selectedMedia.thumbnail"
+                  :poster="selectedMedia.thumbnail"
                 ></video>
               </div>
             </div>
@@ -927,7 +927,7 @@
           </div>
         </div>
       </div>
-    </NuxtLayout>
+    </main>
   </template>
   
   <script setup lang="ts">
@@ -935,7 +935,8 @@
   import { useRouter } from 'vue-router';
   import {
     Video,
-    VideoPlus,
+    // Video
+    // Video,
     Upload,
     Search,
     Calendar,

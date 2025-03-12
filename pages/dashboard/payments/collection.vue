@@ -98,7 +98,7 @@
             </div>
             <div class="mt-6 grid grid-cols-1 gap-6 sm:grid-cols-2">
               <div class="flex justify-center items-center p-6 bg-gray-50 rounded-lg">
-                <img src="/qr-code-placeholder.png" alt="QR Code" class="w-48 h-48" />
+                <img src="@/assets/img/qr-code.jpg" alt="QR Code" class="w-48 h-48" />
               </div>
               <div class="space-y-4">
                 <div class="rounded-md bg-gray-50 p-4">

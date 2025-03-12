@@ -2,6 +2,7 @@ import { defineNuxtConfig } from "nuxt/config";
 
 export default defineNuxtConfig({
   target: 'static',
+  ssr: false,
   postcss: {
     plugins: {
       "postcss-import": {},
@@ -95,5 +96,31 @@ export default defineNuxtConfig({
         strategyOptions: { cacheableResponse: { statuses: [0, 200] } },
       },
     ],
-  }
+  },
+  nitro: {
+    prerender: {
+      // Only prerender routes that actually exist
+      routes: [
+        '/',
+        '/dashboard',
+        '/dashboard/church-management',
+        '/dashboard/members',
+        '/dashboard/events',
+        '/dashboard/finance',
+        '/dashboard/volunteers'
+      ],
+      // Ignore routes that don't exist
+      ignore: [
+        '/dashboard/{props.to}',
+        '/events/scheduling',
+        '/banking/accounts',
+        '/church/profile',
+        '/church/members',
+        '/church/branches',
+        '/dashbiard/finance',
+        '/volunteer/training',
+        '/login'
+      ]
+    }
+  },
 });
