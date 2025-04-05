@@ -3,6 +3,7 @@ import { defineNuxtConfig } from "nuxt/config";
 export default defineNuxtConfig({
   target: 'static',
   ssr: false,
+
   postcss: {
     plugins: {
       "postcss-import": {},
@@ -11,6 +12,7 @@ export default defineNuxtConfig({
       autoprefixer: {},
     },
   },
+
   app: {
     head: {
       title: "Buildr - Build the future of your business",
@@ -42,9 +44,11 @@ export default defineNuxtConfig({
     preconnect: true, // Optional: Preconnect to the font server
     preload: true, // Optional: Preload the font
   },
+
   plugins: ["~/plugins/aos.client.ts"],
   css: ["/assets/css/main.css"],
   modules: ['@kevinmarrec/nuxt-pwa', "@nuxtjs/tailwindcss", '@nuxtjs/google-fonts'],
+
   pwa: {
     workbox: {
       enabled: true
@@ -97,6 +101,7 @@ export default defineNuxtConfig({
       },
     ],
   },
+
   nitro: {
     prerender: {
       // Only prerender routes that actually exist
@@ -114,13 +119,17 @@ export default defineNuxtConfig({
         '/dashboard/{props.to}',
         '/events/scheduling',
         '/banking/accounts',
-        '/church/profile',
-        '/church/members',
+        '/dashboard/church/profile',
+        '/dashboard/members',
         '/church/branches',
-        '/dashbiard/finance',
+        '/dashboard/finance',
         '/volunteer/training',
         '/login'
       ]
     }
+  },
+
+  devtools: {
+    enabled: false,
   },
 });

@@ -95,6 +95,16 @@
             <p class="text-sm font-medium text-gray-900">Pastor John Doe</p>
             <p class="text-xs text-gray-500">Admin</p>
           </div>
+
+          <div>
+            <button
+              @click="showBLogoutModal = true"
+              class="flex items-center px-4 py-3 text-[#1D2739]  space-x-3"
+            >
+            <img :src="dynamicIcons('logout-icon')" alt="" />
+              <!-- <span>Logout</span> -->
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -109,11 +119,55 @@
     <Menu v-if="!isOpen" class="h-6 w-6" />
     <X v-else class="h-6 w-6" />
   </button>
+
+  <CoreModal
+    :isOpen="showBLogoutModal"
+    @close="showBLogoutModal = false"
+    >
+    <div class="bg-white rounded-xl max-w-sm w-full text-center">
+      <!-- Icon -->
+      <div class="flex justify-center items-center bg-yellow-500 rounded-full w-16 h-16 mx-auto mb-4">
+        <svg width="65" height="64" viewBox="0 0 65 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="0.921875" width="63.1513" height="64" rx="31.5756" fill="#F3A218"/>
+          <path d="M42.2031 32.375C42.2031 26.8521 37.7259 22.375 32.2031 22.375C26.6803 22.375 22.2031 26.8521 22.2031 32.375C22.2031 37.8978 26.6803 42.375 32.2031 42.375C37.7259 42.375 42.2031 37.8978 42.2031 32.375Z" stroke="white" stroke-width="1.5"/>
+          <path d="M32.4453 37.375V32.375C32.4453 31.9036 32.4453 31.6679 32.2988 31.5214C32.1524 31.375 31.9167 31.375 31.4453 31.375" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M32.1953 28.377H32.2043" stroke="white" stroke-width="3.25" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          
+      </div>
+      
+      <!-- Title -->
+      <h2 class="text-lg font-semibold text-gray-700 mb-2">Logout</h2>
+
+      <!-- Message -->
+      <p class="text-gray-500 mb-6">Are you sure you want to logout?</p>
+
+      <!-- Buttons -->
+      <div class="space-y-3">
+        <button
+          type="button"
+          class="w-full disabled:cursor-not-allowed text-sm disabled:opacity-25 bg-[#292929] text-white py-3.5 rounded-md font-semibold"
+          @click="onConfirm"
+          :disabled="loading"
+        >
+          Yes, log out
+        </button>
+        <button
+        type="button"
+          class="w-full bg-[#EBE5E0] text-gray-700 text-sm py-3.5 rounded-md font-semibold"
+          @click="onCancel"
+        >
+          Cancel
+        </button>
+      </div>
+    </div>
+    </CoreModal>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { dynamicIcons } from "@/utils/assets";
 import {
   Calendar,
   Video,
@@ -147,6 +201,8 @@ import {
 const route = useRoute();
 const router = useRouter();
 const isOpen = ref(false);
+const showBLogoutModal = ref(false);
+const loading = ref(false)
 
 // Track which section is expanded (-1 means none)
 const expandedSectionIndex = ref<number>(-1);
@@ -215,8 +271,8 @@ const navigation = [
     name: 'Member Management',
     href: '/dashboard/church', // Parent route for the section
     items: [
-      { name: 'Church Profile Setup', href: '/dashboard/church/profile', icon: Church },
-      { name: 'Member & Staff Management', href: '/dashboard/church/members', icon: User },
+      { name: 'Church Profile Setup', href: '/dashboard//church/profile', icon: Church },
+      { name: 'Member & Staff Management', href: '/dashboard//members', icon: User },
       { name: 'Branch Management', href: '/dashboard/church/branches', icon: GitBranch },
     ],
   },
@@ -298,5 +354,21 @@ const navigation = [
 onMounted(() => {
   expandActiveSection();
 });
+
+const onCancel = () => {
+  showBLogoutModal.value = false
+  // Logic to close the modal
+  console.log("Cancelled");
+};
+
+const onConfirm = () => {
+  // Logic for logout
+  loading.value = true
+  localStorage.clear()
+  showBLogoutModal.value = false
+  router.push('/')
+  window.location.href="/"
+  console.log("Logging out...");
+};
 </script>
 

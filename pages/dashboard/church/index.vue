@@ -10,7 +10,7 @@
         <!-- Feature Navigation Cards -->
         <div class="grid grid-cols-1 gap-6 sm:grid-cols-3">
           <!-- Church Profile Card -->
-          <NuxtLink to="/church/profile" 
+          <NuxtLink to="/dashboard/church/profile" 
             class="group relative overflow-hidden rounded-lg bg-white shadow transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-fade-in"
           >
             <div class="absolute inset-0 bg-gradient-to-r from-indigo-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -45,7 +45,7 @@
           </NuxtLink>
   
           <!-- Member Management Card -->
-          <NuxtLink to="/church/members" 
+          <NuxtLink to="/dashboard/members" 
             class="group relative overflow-hidden rounded-lg bg-white shadow transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-fade-in animation-delay-100"
           >
             <div class="absolute inset-0 bg-gradient-to-r from-purple-50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -156,7 +156,7 @@
               <div class="flex items-center justify-between">
                 <h3 class="text-base font-semibold leading-6 text-gray-900">Recent Members</h3>
                 <NuxtLink
-                  to="/church/members"
+                  to="/dashboard/members"
                   class="text-sm font-medium text-indigo-600 hover:text-indigo-500"
                 >
                   View all
@@ -239,7 +239,7 @@
         <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 animate-fade-in animation-delay-500">
           <button
             type="button"
-            @click="navigateTo('/church/members/new')"
+            @click="navigateTo('/dashboard/members/new')"
             class="relative overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:px-6 sm:pt-6 transform transition-all duration-300 hover:shadow-md hover:-translate-y-1 text-left"
           >
             <div class="flex items-center">
@@ -275,7 +275,7 @@
   
           <button
             type="button"
-            @click="navigateTo('/church/members/roles')"
+            @click="navigateTo('/dashboard/members/roles')"
             class="relative overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:px-6 sm:pt-6 transform transition-all duration-300 hover:shadow-md hover:-translate-y-1 text-left"
           >
             <div class="flex items-center">

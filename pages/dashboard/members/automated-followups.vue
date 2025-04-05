@@ -1,5 +1,5 @@
 <template>
-    <div class="min-h-screen bg-gray-50 py-8">
+    <div class="min-h-screen ">
       <div class="container mx-auto px-4">
         <div class="mb-8 animate-fade-in">
           <h1 class="text-3xl font-bold text-purple-800 mb-2">Automated Follow-ups</h1>

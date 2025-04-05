@@ -19,7 +19,7 @@
   
             <button
               type="button"
-              @click="navigateTo('/church/members/roles')"
+              @click="navigateTo('/dashboard/members/roles')"
               class="mt-3 inline-flex items-center justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0"
             >
               <Users class="mr-2 h-4 w-4 text-gray-500" />

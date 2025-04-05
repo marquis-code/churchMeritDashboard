@@ -1,16 +1,16 @@
 <template>
-    <div class="min-h-screen bg-gradient-to-br from-indigo-50 to-purple-50">
-      <div class="container mx-auto px-4 py-12">
-        <div class="text-center mb-12">
-          <h1 class="text-4xl md:text-5xl font-bold text-indigo-800 mb-4 animate-fade-in">
+    <div class="min-h-screen ">
+      <div class="container mx-auto">
+        <div class="text-start mb-12">
+          <h1 class="text-2xl font-bold text-indigo-800 mb-4 animate-fade-in">
             Member Engagement & Discipleship
           </h1>
-          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p class="text-lg text-gray-600">
             Manage your church community with powerful tools for group management and automated follow-ups.
           </p>
         </div>
   
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8  mx-auto">
           <NuxtLink to="/dashboard/members/group-management" 
             class="feature-card group bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-105">
             <div class="h-40 bg-indigo-600 flex items-center justify-center p-6">

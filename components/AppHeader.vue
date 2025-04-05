@@ -480,7 +480,7 @@
     // Navigate to appropriate page based on notification type
     switch (notification.type) {
       case 'member':
-        router.push('/dashboard/church/members');
+        router.push('/dashboard//members');
         break;
       case 'event':
         router.push('/dashboard/events');
@@ -550,8 +550,8 @@
       name: 'Member Management',
       href: '/dashboard/church', // Parent route for the section
       items: [
-        { name: 'Church Profile Setup', href: '/dashboard/church/profile', icon: Church },
-        { name: 'Member & Staff Management', href: '/dashboard/church/members', icon: User },
+        { name: 'Church Profile Setup', href: '/dashboard//church/profile', icon: Church },
+        { name: 'Member & Staff Management', href: '/dashboard//members', icon: User },
         { name: 'Branch Management', href: '/dashboard/church/branches', icon: GitBranch },
       ],
     },
@@ -632,7 +632,7 @@
   // Quick links for command palette
   const quickLinks = [
     { name: 'Dashboard', href: '/dashboard', icon: Settings },
-    { name: 'Member Management', href: '/dashboard/church/members', icon: User },
+    { name: 'Member Management', href: '/dashboard//members', icon: User },
     { name: 'Event Scheduling', href: '/dashboard/events', icon: Calendar },
     { name: 'Payment Collection', href: '/dashboard/payments/collection', icon: DollarSign },
     { name: 'Notifications', href: '/dashboard/notifications/in-app-notification', icon: Bell },

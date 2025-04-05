@@ -39,7 +39,7 @@
         </div>
       </NuxtLink>
       
-      <NuxtLink to="/dashbiard/finance" class="group">
+      <NuxtLink to="/dashboard/finance" class="group">
         <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-200 transition-all duration-300 hover:shadow-lg group-hover:border-purple-500 h-full">
           <div class="p-6">
             <div class="flex items-center justify-between mb-4">
